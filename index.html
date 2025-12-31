@@ -303,7 +303,7 @@
             background: white;
             border-radius: 15px;
             padding: 25px;
-            width: 250px;
+            width: 280px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
             border-top: 5px solid #ff6b9d;
             transition: transform 0.3s ease;
@@ -339,6 +339,8 @@
             font-size: 1rem;
             color: #5a3d5c;
             line-height: 1.5;
+            margin-bottom: 15px;
+            min-height: 60px;
         }
         
         .event-badge {
@@ -350,6 +352,36 @@
             padding: 5px 10px;
             border-radius: 20px;
             font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        /* Event countdown styles */
+        .event-countdown {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(255, 235, 245, 0.5);
+            border-radius: 10px;
+        }
+        
+        .event-countdown-item {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .event-countdown-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #e91e63;
+            line-height: 1;
+        }
+        
+        .event-countdown-label {
+            font-size: 0.7rem;
+            color: #9c4a8a;
+            margin-top: 3px;
+            text-transform: uppercase;
             font-weight: 600;
         }
         
@@ -553,6 +585,105 @@
             animation: fall linear forwards;
         }
         
+        /* Bouquet Animation */
+        .bouquet-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s ease;
+        }
+        
+        .bouquet-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .bouquet-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            transform: translateY(50px);
+            transition: transform 0.5s ease;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .bouquet-modal.active .bouquet-container {
+            transform: translateY(0);
+        }
+        
+        .bouquet-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #ff6b9d;
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .bouquet-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: #e91e63;
+            animation: bouquetFloat 2s infinite ease-in-out;
+        }
+        
+        @keyframes bouquetFloat {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+        
+        .bouquet-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: #e91e63;
+            margin-bottom: 15px;
+        }
+        
+        .bouquet-message {
+            font-size: 1.2rem;
+            color: #5a3d5c;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        
+        .bouquet-flowers {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .bouquet-flower {
+            font-size: 2rem;
+            animation: flowerBloom 1.5s infinite alternate;
+        }
+        
+        @keyframes flowerBloom {
+            0% { transform: scale(1) rotate(0deg); }
+            100% { transform: scale(1.2) rotate(10deg); }
+        }
+        
         /* Responsive */
         @media (max-width: 768px) {
             h1 { font-size: 3rem; }
@@ -567,6 +698,7 @@
             .music-info { max-width: 140px; font-size: 0.8rem; }
             .events-container { gap: 20px; }
             .event-card { width: 90%; }
+            .event-countdown-value { font-size: 1.3rem; }
         }
         
         @media (max-width: 480px) {
@@ -580,6 +712,8 @@
             .nav-btn { padding: 12px 20px; font-size: 1rem; }
             .music-player { bottom: 15px; right: 15px; padding: 8px 12px; }
             .music-info { display: none; }
+            .event-countdown { flex-wrap: wrap; }
+            .event-countdown-item { flex: 0 0 calc(50% - 10px); margin-bottom: 10px; }
         }
         
         /* Heart rain animation */
@@ -656,12 +790,41 @@
         .birthday-pulse {
             animation: birthdayPulse 2s infinite;
         }
+        
+        /* Event today animation */
+        .event-today {
+            animation: eventTodayGlow 2s infinite alternate;
+        }
+        
+        @keyframes eventTodayGlow {
+            0% { box-shadow: 0 10px 20px rgba(0,0,0,0.1), 0 0 10px rgba(233, 30, 99, 0.3); }
+            100% { box-shadow: 0 15px 30px rgba(0,0,0,0.1), 0 0 20px rgba(233, 30, 99, 0.6); }
+        }
     </style>
 </head>
 <body>
     <!-- Celebration Animation -->
     <div class="celebration" id="celebration"></div>
     <div class="birthday-celebration" id="birthdayCelebration"></div>
+    
+    <!-- Bouquet Modal -->
+    <div class="bouquet-modal" id="bouquetModal">
+        <div class="bouquet-container">
+            <button class="bouquet-close" id="bouquetClose">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="bouquet-icon">💐</div>
+            <h3 class="bouquet-title" id="bouquetTitle">Special Message</h3>
+            <p class="bouquet-message" id="bouquetMessage">This is a special message for you!</p>
+            <div class="bouquet-flowers">
+                <div class="bouquet-flower" style="animation-delay: 0s;">🌸</div>
+                <div class="bouquet-flower" style="animation-delay: 0.2s;">🌹</div>
+                <div class="bouquet-flower" style="animation-delay: 0.4s;">🌺</div>
+                <div class="bouquet-flower" style="animation-delay: 0.6s;">🌷</div>
+                <div class="bouquet-flower" style="animation-delay: 0.8s;">💐</div>
+            </div>
+        </div>
+    </div>
     
     <!-- Music player -->
     <div class="music-player" id="musicPlayer">
@@ -802,6 +965,24 @@
                     <h3 class="event-title">My Birthday</h3>
                     <div class="event-date">February 3rd</div>
                     <p class="event-message">The day I was born to meet you. Celebrating life with you makes every birthday special!</p>
+                    <div class="event-countdown" id="myBirthdayCountdown">
+                        <div class="event-countdown-item">
+                            <div class="event-countdown-value" id="myBdayDays">0</div>
+                            <div class="event-countdown-label">Days</div>
+                        </div>
+                        <div class="event-countdown-item">
+                            <div class="event-countdown-value" id="myBdayHours">0</div>
+                            <div class="event-countdown-label">Hours</div>
+                        </div>
+                        <div class="event-countdown-item">
+                            <div class="event-countdown-value" id="myBdayMinutes">0</div>
+                            <div class="event-countdown-label">Mins</div>
+                        </div>
+                        <div class="event-countdown-item">
+                            <div class="event-countdown-value" id="myBdaySeconds">0</div>
+                            <div class="event-countdown-label">Secs</div>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- Her Birthday (Apr 12) -->
@@ -811,6 +992,24 @@
                     <h3 class="event-title">Her Birthday</h3>
                     <div class="event-date">April 12th</div>
                     <p class="event-message">The day the most amazing person came into this world. Can't wait to celebrate you!</p>
+                    <div class="event-countdown" id="herBirthdayCountdown">
+                        <div class="event-countdown-item">
+                            <div class="event-countdown-value" id="herBdayDays">0</div>
+                            <div class="event-countdown-label">Days</div>
+                        </div>
+                        <div class="event-countdown-item">
+                            <div class="event-countdown-value" id="herBdayHours">0</div>
+                            <div class="event-countdown-label">Hours</div>
+                        </div>
+                        <div class="event-countdown-item">
+                            <div class="event-countdown-value" id="herBdayMinutes">0</div>
+                            <div class="event-countdown-label">Mins</div>
+                        </div>
+                        <div class="event-countdown-item">
+                            <div class="event-countdown-value" id="herBdaySeconds">0</div>
+                            <div class="event-countdown-label">Secs</div>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- Valentine's Day -->
@@ -820,6 +1019,24 @@
                     <h3 class="event-title">Valentine's Day</h3>
                     <div class="event-date">February 14th</div>
                     <p class="event-message">A day dedicated to celebrating our love. You're my forever Valentine.</p>
+                    <div class="event-countdown" id="valentineCountdown">
+                        <div class="event-countdown-item">
+                            <div class="event-countdown-value" id="valentineDays">0</div>
+                            <div class="event-countdown-label">Days</div>
+                        </div>
+                        <div class="event-countdown-item">
+                            <div class="event-countdown-value" id="valentineHours">0</div>
+                            <div class="event-countdown-label">Hours</div>
+                        </div>
+                        <div class="event-countdown-item">
+                            <div class="event-countdown-value" id="valentineMinutes">0</div>
+                            <div class="event-countdown-label">Mins</div>
+                        </div>
+                        <div class="event-countdown-item">
+                            <div class="event-countdown-value" id="valentineSeconds">0</div>
+                            <div class="event-countdown-label">Secs</div>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- New Year Event -->
@@ -829,15 +1046,51 @@
                     <h3 class="event-title">New Year 2026</h3>
                     <div class="event-date">January 1st, 2026</div>
                     <p class="event-message">Our first New Year together! Can't wait to celebrate new beginnings with you.</p>
+                    <div class="event-countdown" id="newYearCountdown">
+                        <div class="event-countdown-item">
+                            <div class="event-countdown-value" id="newYearDays">0</div>
+                            <div class="event-countdown-label">Days</div>
+                        </div>
+                        <div class="event-countdown-item">
+                            <div class="event-countdown-value" id="newYearHours">0</div>
+                            <div class="event-countdown-label">Hours</div>
+                        </div>
+                        <div class="event-countdown-item">
+                            <div class="event-countdown-value" id="newYearMinutes">0</div>
+                            <div class="event-countdown-label">Mins</div>
+                        </div>
+                        <div class="event-countdown-item">
+                            <div class="event-countdown-value" id="newYearSeconds">0</div>
+                            <div class="event-countdown-label">Secs</div>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- Our Anniversary -->
                 <div class="event-card" id="anniversaryEvent">
                     <div class="event-badge">Our Special Day</div>
                     <div class="event-icon">💑</div>
-                    <h3 class="event-title">Our 1st Anniversary</h3>
-                    <div class="event-date">December 4th, 2026</div>
-                    <p class="event-message">365 days of love with you! Celebrating our beautiful journey together.</p>
+                    <h3 class="event-title">Our Anniversary</h3>
+                    <div class="event-date">December 4th</div>
+                    <p class="event-message">Celebrating our beautiful journey together. Every day with you is special!</p>
+                    <div class="event-countdown" id="anniversaryCountdown">
+                        <div class="event-countdown-item">
+                            <div class="event-countdown-value" id="anniversaryDays">0</div>
+                            <div class="event-countdown-label">Days</div>
+                        </div>
+                        <div class="event-countdown-item">
+                            <div class="event-countdown-value" id="anniversaryHours">0</div>
+                            <div class="event-countdown-label">Hours</div>
+                        </div>
+                        <div class="event-countdown-item">
+                            <div class="event-countdown-value" id="anniversaryMinutes">0</div>
+                            <div class="event-countdown-label">Mins</div>
+                        </div>
+                        <div class="event-countdown-item">
+                            <div class="event-countdown-value" id="anniversarySeconds">0</div>
+                            <div class="event-countdown-label">Secs</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -884,7 +1137,7 @@
         <!-- Footer -->
         <footer>
             <div class="footer-heart">❤️</div>
-            <h3 class="end-message">To My Beautiful Girlfriend SWeety</h3>
+            <h3 class="end-message">To My Beautiful Girlfriend Sweety</h3>
             <p>Every day since December 4th, 2025 has been a blessing with you.</p>
             <p>I fall in love with you more with each passing moment.</p>
             <p style="margin-top: 20px; font-size: 0.9rem; color: #9c4a8a;">
@@ -897,7 +1150,60 @@
         // Set our anniversary date - December 4th, 2025
         const anniversaryDate = new Date('December 4, 2025 00:00:00').getTime();
         
-        // Update countdown every second
+        // Event data with messages for bouquet modal
+        const eventsData = {
+            myBirthday: {
+                name: "My Birthday",
+                date: "February 3",
+                nextDate: getNextEventDate(1, 3), // Month (0-indexed), Day
+                message: "Happy Birthday to me! The day I was born just to meet you. Celebrating life is so much more special with you by my side. Thank you for making every birthday unforgettable! 🎂❤️",
+                bouquetTitle: "For My Birthday! 🎂"
+            },
+            herBirthday: {
+                name: "Her Birthday",
+                date: "April 12",
+                nextDate: getNextEventDate(3, 12),
+                message: "Happy Birthday to the most amazing person in my life! The day you came into this world was the day it became a brighter place. I'm so grateful to celebrate you today and always! 🎁💖",
+                bouquetTitle: "Happy Birthday! 🎁"
+            },
+            valentine: {
+                name: "Valentine's Day",
+                date: "February 14",
+                nextDate: getNextEventDate(1, 14),
+                message: "Happy Valentine's Day my love! Today and every day, I celebrate our beautiful love. You're not just my Valentine for today, you're my Valentine for life! ❤️🌹",
+                bouquetTitle: "Happy Valentine's Day! ❤️"
+            },
+            newYear: {
+                name: "New Year",
+                date: "January 1",
+                nextDate: getNextEventDate(0, 1),
+                message: "Happy New Year my love! Cheers to new beginnings and endless adventures together. I can't wait to create more beautiful memories with you in the coming year! 🎉✨",
+                bouquetTitle: "Happy New Year! 🎉"
+            },
+            anniversary: {
+                name: "Our Anniversary",
+                date: "December 4",
+                nextDate: getNextEventDate(11, 4),
+                message: "Happy Anniversary my love! Celebrating another year of our beautiful journey together. Every moment with you is precious, and I look forward to many more years by your side! 💑💖",
+                bouquetTitle: "Happy Anniversary! 💑"
+            }
+        };
+        
+        // Function to get next event date (automatically calculates next year if date has passed)
+        function getNextEventDate(month, day) {
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            const eventDate = new Date(currentYear, month, day);
+            
+            // If event has already passed this year, set for next year
+            if (eventDate < now) {
+                eventDate.setFullYear(currentYear + 1);
+            }
+            
+            return eventDate;
+        }
+        
+        // Update main countdown every second
         function updateCountdown() {
             const now = new Date().getTime();
             const timeSince = now - anniversaryDate;
@@ -918,8 +1224,79 @@
             document.getElementById('minutes').textContent = minutes;
             document.getElementById('seconds').textContent = seconds;
             
+            // Update all event countdowns
+            updateEventCountdowns();
+            
             // Check for special events
             checkSpecialEvents();
+        }
+        
+        // Update all event countdowns
+        function updateEventCountdowns() {
+            const now = new Date();
+            
+            // Update each event countdown
+            updateSingleCountdown('myBirthday', eventsData.myBirthday.nextDate);
+            updateSingleCountdown('herBirthday', eventsData.herBirthday.nextDate);
+            updateSingleCountdown('valentine', eventsData.valentine.nextDate);
+            updateSingleCountdown('newYear', eventsData.newYear.nextDate);
+            updateSingleCountdown('anniversary', eventsData.anniversary.nextDate);
+            
+            // Check if any event is today and reset for next year if needed
+            checkAndResetEventDates(now);
+        }
+        
+        // Update single event countdown
+        function updateSingleCountdown(eventId, eventDate) {
+            const now = new Date().getTime();
+            const timeUntil = eventDate.getTime() - now;
+            
+            // If event has passed, recalculate for next year
+            if (timeUntil < 0) {
+                eventsData[eventId].nextDate = getNextEventDate(
+                    eventsData[eventId].nextDate.getMonth(),
+                    eventsData[eventId].nextDate.getDate()
+                );
+                updateSingleCountdown(eventId, eventsData[eventId].nextDate);
+                return;
+            }
+            
+            // Calculate days, hours, minutes, seconds
+            const seconds = Math.floor((timeUntil / 1000) % 60);
+            const minutes = Math.floor((timeUntil / (1000 * 60)) % 60);
+            const hours = Math.floor((timeUntil / (1000 * 60 * 60)) % 24);
+            const days = Math.floor(timeUntil / (1000 * 60 * 60 * 24));
+            
+            // Update display based on event ID
+            const prefix = eventId === 'myBirthday' ? 'myBday' : 
+                          eventId === 'herBirthday' ? 'herBday' : 
+                          eventId;
+            
+            document.getElementById(`${prefix}Days`).textContent = days;
+            document.getElementById(`${prefix}Hours`).textContent = hours;
+            document.getElementById(`${prefix}Minutes`).textContent = minutes;
+            document.getElementById(`${prefix}Seconds`).textContent = seconds;
+            
+            // If event is today, highlight it
+            if (days === 0 && hours < 24) {
+                document.getElementById(`${eventId}Event`).classList.add('event-today');
+            } else {
+                document.getElementById(`${eventId}Event`).classList.remove('event-today');
+            }
+        }
+        
+        // Check and reset event dates if they have passed
+        function checkAndResetEventDates(now) {
+            Object.keys(eventsData).forEach(eventId => {
+                const eventDate = eventsData[eventId].nextDate;
+                if (eventDate < now) {
+                    // Event has passed, set for next year
+                    eventsData[eventId].nextDate = getNextEventDate(
+                        eventDate.getMonth(),
+                        eventDate.getDate()
+                    );
+                }
+            });
         }
         
         // Initialize countdown
@@ -1217,7 +1594,40 @@
             }, 6000);
         }
         
-        // Check for special events
+        // Bouquet modal functionality
+        const bouquetModal = document.getElementById('bouquetModal');
+        const bouquetClose = document.getElementById('bouquetClose');
+        const bouquetTitle = document.getElementById('bouquetTitle');
+        const bouquetMessage = document.getElementById('bouquetMessage');
+        
+        // Show bouquet modal with event-specific message
+        function showBouquetModal(eventId) {
+            const event = eventsData[eventId];
+            bouquetTitle.textContent = event.bouquetTitle;
+            bouquetMessage.textContent = event.message;
+            bouquetModal.classList.add('active');
+            
+            // Trigger appropriate celebration
+            if (eventId.includes('Birthday')) {
+                createBirthdayCelebration();
+            } else {
+                createCelebration();
+            }
+        }
+        
+        // Close bouquet modal
+        bouquetClose.addEventListener('click', function() {
+            bouquetModal.classList.remove('active');
+        });
+        
+        // Close modal when clicking outside
+        bouquetModal.addEventListener('click', function(e) {
+            if (e.target === bouquetModal) {
+                bouquetModal.classList.remove('active');
+            }
+        });
+        
+        // Check for special events and show bouquet if it's the event day
         function checkSpecialEvents() {
             const now = new Date();
             const currentMonth = now.getMonth();
@@ -1231,8 +1641,8 @@
                 myBdayCard.style.transform = 'scale(1.05)';
                 myBdayCard.classList.add('birthday-pulse');
                 
-                // Trigger birthday celebration
-                createBirthdayCelebration();
+                // Show bouquet modal for birthday
+                showBouquetModal('myBirthday');
             }
             
             // Her Birthday (Apr 12)
@@ -1243,8 +1653,8 @@
                 herBdayCard.style.transform = 'scale(1.05)';
                 herBdayCard.classList.add('birthday-pulse');
                 
-                // Trigger birthday celebration
-                createBirthdayCelebration();
+                // Show bouquet modal for birthday
+                showBouquetModal('herBirthday');
             }
             
             // New Year (Jan 1)
@@ -1253,8 +1663,8 @@
                 document.getElementById('newYearEvent').style.boxShadow = '0 15px 30px rgba(255, 107, 157, 0.4)';
                 document.getElementById('newYearEvent').style.transform = 'scale(1.05)';
                 
-                // Trigger celebration
-                createCelebration();
+                // Show bouquet modal for New Year
+                showBouquetModal('newYear');
             }
             
             // Valentine's Day (Feb 14)
@@ -1263,8 +1673,8 @@
                 document.getElementById('valentineEvent').style.boxShadow = '0 15px 30px rgba(255, 107, 157, 0.4)';
                 document.getElementById('valentineEvent').style.transform = 'scale(1.05)';
                 
-                // Trigger celebration
-                createCelebration();
+                // Show bouquet modal for Valentine's
+                showBouquetModal('valentine');
             }
             
             // Our Anniversary (Dec 4)
@@ -1273,8 +1683,8 @@
                 document.getElementById('anniversaryEvent').style.boxShadow = '0 15px 30px rgba(255, 107, 157, 0.4)';
                 document.getElementById('anniversaryEvent').style.transform = 'scale(1.05)';
                 
-                // Trigger celebration
-                createCelebration();
+                // Show bouquet modal for anniversary
+                showBouquetModal('anniversary');
             }
         }
         
@@ -1324,13 +1734,18 @@
                 setTimeout(() => createHeartRain(), i * 200);
             }
             
-            // Add click events to event cards
+            // Add click events to event cards to show bouquet modal
             document.querySelectorAll('.event-card').forEach(card => {
                 card.addEventListener('click', function() {
-                    if (this.classList.contains('birthday-card')) {
-                        createBirthdayCelebration();
-                    } else {
-                        createCelebration();
+                    const eventId = this.id.replace('Event', '');
+                    if (eventsData[eventId]) {
+                        showBouquetModal(eventId);
+                    } else if (this.classList.contains('birthday-card')) {
+                        if (this.id === 'myBirthdayEvent') {
+                            showBouquetModal('myBirthday');
+                        } else if (this.id === 'herBirthdayEvent') {
+                            showBouquetModal('herBirthday');
+                        }
                     }
                 });
             });
@@ -1359,6 +1774,9 @@
             } else if (e.key === 'b' || e.key === 'B') {
                 // B key triggers birthday celebration
                 createBirthdayCelebration();
+            } else if (e.key === 'Escape') {
+                // Escape key closes bouquet modal
+                bouquetModal.classList.remove('active');
             }
         });
         
